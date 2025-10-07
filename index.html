@@ -114,66 +114,68 @@
 </div>
 
 <script>
-const envelope = document.getElementById('envelope');
-const card = document.getElementById('card');
-const canvas = document.getElementById('confettiCanvas');
-const ctx = canvas.getContext('2d');
-let confettis = [];
+window.addEventListener('DOMContentLoaded', function() {
+  const envelope = document.getElementById('envelope');
+  const card = document.getElementById('card');
+  const canvas = document.getElementById('confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  let confettis = [];
 
-function resizeCanvas(){
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-
-class Confetti {
-  constructor(){
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height - canvas.height;
-    this.color = `hsl(${Math.random()*360},100%,70%)`;
-    this.size = Math.random() * 8 + 4;
-    this.speed = Math.random() * 3 + 2;
-    this.spin = Math.random() * 360;
+  function resizeCanvas(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
   }
-  update(){
-    this.y += this.speed;
-    this.spin += 5;
-    if(this.y > canvas.height){
-      this.y = -10;
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  class Confetti {
+    constructor(){
       this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height - canvas.height;
+      this.color = `hsl(${Math.random()*360},100%,70%)`;
+      this.size = Math.random() * 8 + 4;
+      this.speed = Math.random() * 3 + 2;
+      this.spin = Math.random() * 360;
+    }
+    update(){
+      this.y += this.speed;
+      this.spin += 5;
+      if(this.y > canvas.height){
+        this.y = -10;
+        this.x = Math.random() * canvas.width;
+      }
+    }
+    draw(){
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.spin * Math.PI/180);
+      ctx.fillStyle = this.color;
+      ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+      ctx.restore();
     }
   }
-  draw(){
-    ctx.save();
-    ctx.translate(this.x, this.y);
-    ctx.rotate(this.spin * Math.PI/180);
-    ctx.fillStyle = this.color;
-    ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
-    ctx.restore();
+
+  function loop(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    confettis.forEach(c=>{c.update(); c.draw();});
+    requestAnimationFrame(loop);
   }
-}
 
-function loop(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  confettis.forEach(c=>{c.update(); c.draw();});
-  requestAnimationFrame(loop);
-}
+  for(let i=0;i<150;i++) confettis.push(new Confetti());
+  loop();
 
-for(let i=0;i<150;i++) confettis.push(new Confetti());
-loop();
+  document.getElementById('celebrateBtn').addEventListener('click', ()=>{
+    for(let i=0;i<confettis.length;i++){
+      confettis[i].y = Math.random()*canvas.height - canvas.height;
+    }
+    const audio = new Audio('https://cdn.pixabay.com/download/audio/2021/09/09/audio_1b89dd1d34.mp3?filename=happy-birthday-to-you-24084.mp3');
+    audio.play();
+  });
 
-document.getElementById('celebrateBtn').addEventListener('click', ()=>{
-  for(let i=0;i<confettis.length;i++){
-    confettis[i].y = Math.random()*canvas.height - canvas.height;
-  }
-  const audio = new Audio('https://cdn.pixabay.com/download/audio/2021/09/09/audio_1b89dd1d34.mp3?filename=happy-birthday-to-you-24084.mp3');
-  audio.play();
-});
-
-envelope.addEventListener('click', ()=>{
-  envelope.classList.add('open');
-  setTimeout(()=>card.classList.add('show'),600);
+  envelope.addEventListener('click', ()=>{
+    envelope.classList.add('open');
+    setTimeout(()=>card.classList.add('show'),600);
+  });
 });
 </script>
 </body>
