@@ -1,173 +1,173 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>猪猪老婆生日快乐 🎂</title>
-<style>
-  body {
-    margin: 0;
-    height: 100vh;
-    background: linear-gradient(135deg, #ffe6e6, #ffd6e0);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: "Microsoft YaHei", sans-serif;
-    overflow: hidden;
-  }
-  .envelope {
-    width: 340px; height: 220px;
-    background: #fff5f7;
-    border: 2px solid #ff9aae;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    position: relative;
-    cursor: pointer;
-    transition: transform 0.4s ease;
-  }
-  .envelope:hover { transform: translateY(-6px) scale(1.02); }
-  .seal {
-    width: 80px; height: 80px;
-    border-radius: 50%;
-    background: linear-gradient(180deg,#ff6b81,#ff4b69);
-    color: #fff; font-weight: bold; font-size: 20px;
-    display: flex; justify-content: center; align-items: center;
-    position: absolute;
-    left: 50%; top: 50%;
-    transform: translate(-50%,-50%);
-    box-shadow: 0 4px 12px rgba(255,80,100,0.3);
-  }
-  .card {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%,-50%) scale(0.9);
-    opacity: 0;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-    width: 90%; max-width: 600px; height: 420px;
-    padding: 24px;
-    text-align: center;
-    transition: transform 0.6s ease, opacity 0.6s ease;
-  }
-  .card.show {
-    transform: translate(-50%,-50%) scale(1);
-    opacity: 1;
-  }
-  h1 { color: #ff4b69; font-size: 26px; }
-  p {
-    color: #5a3a3a;
-    font-size: 18px;
-    line-height: 1.7;
-    white-space: pre-line;
-  }
-  button {
-    background: linear-gradient(180deg,#ff6b81,#ff4b69);
-    border: none; color: white;
-    padding: 10px 16px;
-    font-size: 16px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-top: 20px;
-  }
-  #confettiCanvas {
-    position: fixed; inset: 0;
-    pointer-events: none;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日祝福</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+        
+        .envelope-container {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            margin: 0 auto 40px;
+            cursor: pointer;
+        }
+        
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #ff6b6b;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.5s ease;
+            z-index: 2;
+        }
+        
+        .envelope:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #ff8e8e;
+            clip-path: polygon(0 0, 50% 50%, 100% 0);
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .envelope:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #ff5252;
+            clip-path: polygon(0 0, 0 100%, 50% 50%);
+            border-radius: 8px 0 0 8px;
+        }
+        
+        .letter {
+            position: absolute;
+            width: 90%;
+            height: 90%;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            top: 5%;
+            left: 5%;
+            z-index: 1;
+            transform: translateY(0);
+            transition: transform 0.5s ease 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .letter h2 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+        
+        .letter p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        /* 信封打开时的状态 */
+        .envelope-container.open .envelope {
+            transform: translateY(-50%);
+        }
+        
+        .envelope-container.open .letter {
+            transform: translateY(-80px);
+            z-index: 3;
+        }
+        
+        .instruction {
+            margin-top: 20px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .envelope-container {
+                width: 250px;
+                height: 170px;
+            }
+        }
+    </style>
 </head>
 <body>
-<canvas id="confettiCanvas"></canvas>
+    <div class="container">
+        <h1>生日快乐！</h1>
+        
+        <div class="envelope-container" id="envelope">
+            <div class="envelope"></div>
+            <div class="letter">
+                <h2>亲爱的朋友</h2>
+                <p>在这个特别的日子里，</p>
+                <p>愿你的生活充满欢笑和幸福，</p>
+                <p>愿你的梦想都能实现！</p>
+                <p>生日快乐！🎂🎉</p>
+            </div>
+        </div>
+        
+        <p class="instruction">点击信封打开祝福</p>
+    </div>
 
-<div class="envelope" id="envelope">
-  <div class="seal">点我</div>
-</div>
-
-<div class="card" id="card">
-  <h1>亲爱的猪猪老婆 💖</h1>
-  <p>
-今天是属于你的日子～
-愿你的笑容永远像春天一样灿烂，
-愿我们每天都像今天一样甜蜜。
-
-谢谢你一直的包容与陪伴，
-你是我世界里最温柔的光。
-
-点击按钮，吹灭蜡烛、许下愿望吧～
-它们都会悄悄为你实现。
-
-—— 永远爱你的那只猪猪 💕
-  </p>
-  <button id="celebrateBtn">🎂 吹灭蜡烛 / 放烟花 🎉</button>
-</div>
-
-<script>
-window.addEventListener('DOMContentLoaded', function() {
-  const envelope = document.getElementById('envelope');
-  const card = document.getElementById('card');
-  const canvas = document.getElementById('confettiCanvas');
-  const ctx = canvas.getContext('2d');
-  let confettis = [];
-
-  function resizeCanvas(){
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
-
-  class Confetti {
-    constructor(){
-      this.x = Math.random() * canvas.width;
-      this.y = Math.random() * canvas.height - canvas.height;
-      this.color = `hsl(${Math.random()*360},100%,70%)`;
-      this.size = Math.random() * 8 + 4;
-      this.speed = Math.random() * 3 + 2;
-      this.spin = Math.random() * 360;
-    }
-    update(){
-      this.y += this.speed;
-      this.spin += 5;
-      if(this.y > canvas.height){
-        this.y = -10;
-        this.x = Math.random() * canvas.width;
-      }
-    }
-    draw(){
-      ctx.save();
-      ctx.translate(this.x, this.y);
-      ctx.rotate(this.spin * Math.PI/180);
-      ctx.fillStyle = this.color;
-      ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
-      ctx.restore();
-    }
-  }
-
-  for(let i=0;i<120;i++) confettis.push(new Confetti());
-  function loop(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    confettis.forEach(c=>{c.update(); c.draw();});
-    requestAnimationFrame(loop);
-  }
-  loop();
-
-  envelope.addEventListener('click', ()=>{
-    envelope.style.transition = 'opacity 0.6s ease';
-    envelope.style.opacity = '0';
-    setTimeout(()=>{
-      envelope.style.display = 'none';
-      card.classList.add('show');
-    },600);
-  });
-
-  document.getElementById('celebrateBtn').addEventListener('click', ()=>{
-    for(let i=0;i<confettis.length;i++){
-      confettis[i].y = Math.random()*canvas.height - canvas.height;
-    }
-    const audio = new Audio('https://cdn.pixabay.com/download/audio/2021/09/09/audio_1b89dd1d34.mp3?filename=happy-birthday-to-you-24084.mp3');
-    audio.play();
-  });
-});
-</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const envelope = document.getElementById('envelope');
+            
+            // 添加点击事件监听器
+            envelope.addEventListener('click', function() {
+                this.classList.toggle('open');
+            });
+            
+            // 添加触摸事件支持（移动设备）
+            envelope.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                this.classList.toggle('open');
+            });
+        });
+    </script>
 </body>
 </html>
