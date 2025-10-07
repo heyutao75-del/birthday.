@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>猪猪老婆的生日惊喜 🎂</title>
+<style>
+  :root{
+    --bg1:#ffecd2;
+    --bg2:#fcb69f;
+    --accent:#ff6b81;
+    --card:#fff8f6;
+    --shadow: 0 10px 30px rgba(0,0,0,0.12);
+  }
+  html,body{height:100%;margin:0;font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; -webkit-font-smoothing:antialiased;}
+  body{
+    background: radial-gradient(circle at 10% 20%, #fff1f0 0%, transparent 20%),
+                linear-gradient(135deg,var(--bg1),var(--bg2));
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+  }
+
+  /* floating hearts */
+  .heart{position:absolute;opacity:0.9;animation:float 8s linear infinite;}
+  @keyframes float{0%{transform:translateY(0) rotate(0);}50%{transform:translateY(-30px) rotate(20deg);}100%{transform:translateY(0) rotate(0);}}
+
+  /* center area */
+  .stage{
+    width:min(980px,95vw);
+    height:min(640px,88vh);
+    background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,248,246,0.9));
+    border-radius:20px;box-shadow:var(--shadow);position:relative;overflow:hidden;padding:36px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+
+  /* envelope */
+  .envelope{
+    width:360px;height:220px;background:linear-gradient(180deg,#fff,#ffe9e6);
+    border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.15);
+    position:relative;cursor:pointer;transform-origin:center;transition:transform .35s;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .envelope:hover{transform:translateY(-6px) scale(1.02);}
+  .flap{
+    position:absolute;top:0;left:0;width:100%;height:50%;
+    background:linear-gradient(180deg,#ff8080,#ffb3b3);
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    border-top-left-radius:12px;border-top-right-radius:12px;
+    transform-origin:top center;transition:transform .6s cubic-bezier(.2,.8,.3,1);
+    box-shadow:inset 0 -8px 18px rgba(255,255,255,0.15);
+  }
+  .envelope.open .flap{transform:translateY(-110%) rotateX(180deg);}
+
+  .seal{
+    width:86px;height:86px;border-radius:50%;background:linear-gradient(180deg,#fff1f1,#ff9aa2);
+    display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;font-weight:700;
+    box-shadow:0 6px 18px rgba(255,80,100,0.25);position:relative;z-index:2;
+  }
+
+  /* card revealed */
+  .card{
+    width:640px;max-width:90%;height:420px;background:var(--card);border-radius:16px;
+    box-shadow:var(--shadow);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.9);
+    opacity:0;transition:opacity .45s, transform .45s;display:flex;flex-direction:column;padding:28px;
+  }
+  .card.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
+  .card-header{display:flex;justify-content:space-between;align-items:center;}
+  .card-title{font-size:28px;color:#ff476f;font-weight:800;letter-spacing:1px;}
+  .card-sub{color:#7a7a7a;font-size:14px;}
+  .message{margin-top:18px;font-size:20px;line-height:1.6;color:#5a3a3a;flex:1;white-space:pre-wrap;}
+  .actions{display:flex;gap:12px;justify-content:flex-end;margin-top:14px;}
+
+  .btn{
+    background:linear-gradient(180deg,#ff6b81,#ff4a66);color:white;border:none;padding:12px 16px;border-radius:10px;
+    font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(255,80,110,0.18);
+  }
+  .btn.secondary{background:transparent;color:#ff4a66;border:2px solid rgba(255,74,102,0.12);box-shadow:none;font-weight:700;}
+
+  /* cake area */
+  .cake-wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;margin-top:6px;}
+  svg.cake{width:320px;height:auto;cursor:pointer;filter:drop-shadow(0 8px 24px rgba(0,0,0,0.12));}
+
+  /* confetti canvas */
+  #confettiCanvas{position:absolute;inset:0;pointer-events:none;}
+
+  /* little sparkles */
+  .sparkle{position:absolute;width:8px;height:8px;background:radial-gradient(circle,#fff,#ffd1d1);border-radius:50%;opacity:0.85;filter:blur(0.6px);}
+
+  /* footer note */
+  .footer{position:absolute;bottom:16px;left:24px;color:#9b6a6a;font-size:13px;}
+</style>
+</head>
+<body>
+  <!-- decorative hearts -->
+  <div class="heart" style="left:4%; top:10%; transform:scale(0.9);">❤️</div>
+  <div class="heart" style="left:88%; top:20%; transform:scale(0.8); animation-duration:9s;">💖</div>
+  <div class="heart" style="left:18%; top:78%; transform:scale(0.7); animation-duration:7s;">💕</div>
+  <div class="heart" style="left:76%; top:76%; transform:scale(1); animation-duration:10s;">😍</div>
+
+  <div class="stage" role="main" aria-label="生日惊喜舞台">
+    <div class="envelope" id="envelope" title="点我打开给猪猪老婆的贺卡">
+      <div class="flap"></div>
+      <div class="seal">爱心</div>
+    </div>
+
+    <div class="card" id="card" role="dialog" aria-hidden="true">
+      <div class="card-header">
+        <div>
+          <div class="card-title">亲爱的猪猪老婆</div>
+          <div class="card-sub">这是给你的一封小小惊喜信</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:12px;color:#c75a6f;">特别的日子</div>
+          <div style="font-size:12px;color:#c75a6f;">愿你天天被爱包围</div>
+        </div>
+      </div>
+
+      <div class="message" id="message">
+亲爱的猪猪老婆：
+
+生日快乐！🎂  
+愿你的每一天都像今天一样甜蜜，愿你笑得像阳光一样灿烂。  
+谢谢你一直陪着我，愿我们未来的日子里有更多的拥抱、甜言蜜语和小惊喜。
+
+点击下方的蛋糕，许愿并“吹灭”蜡烛吧！
+      </div>
+
+      <div class="cake-wrap">
+        <!-- Cake SVG with 5 candles (clickable) -->
+        <svg class="cake" id="cake" viewBox="0 0 360 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="生日蛋糕">
+          <!-- plate -->
+          <ellipse cx="180" cy="250" rx="140" ry="20" fill="#ffeef0"/>
+          <!-- cake base -->
+          <rect x="60" y="140" width="240" height="90" rx="18" fill="#ffd7e1"/>
+          <rect x="80" y="120" width="200" height="40" rx="14" fill="#fff0f2"/>
+          <!-- icing -->
+          <path d="M70 140 Q110 110 150 140 T250 140 L260 140 Q260 130 240 126 Q220 122 200 132 Q180 140 160 130 Q140 120 120 130 Q100 140 70 140 Z" fill="#fff5f6" opacity="0.95"/>
+          <!-- candles -->
+          <!-- candle group -->
+          <g id="candles" fill="#fff">
+            <!-- candle 1 -->
+            <rect x="130" y="70" width="12" height="36" rx="2" fill="#fff"/>
+            <circle cx="136" cy="66" r="8" fill="#ffdd66" class="flame" />
+            <!-- candle 2 -->
+            <rect x="155" y="64" width="12" height="42" rx="2" fill="#fff"/>
+            <circle cx="161" cy="60" r="8" fill="#ffdd66" class="flame" />
+            <!-- candle 3 -->
+            <rect x="180" y="60" width="12" height="46" rx="2" fill="#fff"/>
+            <circle cx="186" cy="56" r="8" fill="#ffdd66" class="flame" />
+            <!-- candle 4 -->
+            <rect x="205" y="64" width="12" height="42" rx="2" fill="#fff"/>
+            <circle cx="211" cy="60" r="8" fill="#ffdd66" class="flame" />
+            <!-- candle 5 -->
+            <rect x="230" y="70" width="12" height="36" rx="2" fill="#fff"/>
+            <circle cx="236" cy="66" r="8" fill="#ffdd66" class="flame" />
+          </g>
+
+          <!-- cake decoration text -->
+          <text x="180" y="190" text-anchor="middle" font-size="20" fill="#ff6b81" font-weight="700">生日快乐</text>
+        </svg>
+
+        <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start;">
+          <button class="btn" id="blowBtn">吹灭蜡烛 / 许愿 🎈</button>
+          <button class="btn secondary" id="replayBtn" title="重新打开信封">重新开始</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn secondary" id="fullscreenBtn">全屏欣赏</button>
+      </div>
+    </div>
+
+    <canvas id="confettiCanvas"></canvas>
+
+    <div class="footer">给猪猪老婆的小惊喜 — 点信封开始 ✨</div>
+  </div>
+
+<script>
+/* ==========交互逻辑========== */
+const envelope = document.getElementById('envelope');
+const card = document.getElementById('card');
+const cake
