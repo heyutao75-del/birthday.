@@ -3,42 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>生日祝福</title>
+    <title>猪猪老婆，生日快乐！</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
         }
         
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            overflow-x: hidden;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
             text-align: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+            position: relative;
         }
         
         h1 {
-            color: #333;
-            margin-bottom: 30px;
-            font-size: 2.5rem;
+            color: #ff6b6b;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subtitle {
+            color: #ff8e8e;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff6b6b;
+            transform: rotate(45deg);
+            opacity: 0;
+        }
+        
+        .heart:before, .heart:after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff6b6b;
+            border-radius: 50%;
+        }
+        
+        .heart:before {
+            top: -10px;
+            left: 0;
+        }
+        
+        .heart:after {
+            top: 0;
+            left: -10px;
         }
         
         .envelope-container {
             position: relative;
-            width: 300px;
-            height: 200px;
+            width: 320px;
+            height: 220px;
             margin: 0 auto 40px;
             cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .envelope-container:hover {
+            transform: scale(1.05);
         }
         
         .envelope {
@@ -46,8 +107,8 @@
             width: 100%;
             height: 100%;
             background: #ff6b6b;
-            border-radius: 8px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
             transition: transform 0.5s ease;
             z-index: 2;
         }
@@ -61,7 +122,7 @@
             bottom: 0;
             background: #ff8e8e;
             clip-path: polygon(0 0, 50% 50%, 100% 0);
-            border-radius: 8px 8px 0 0;
+            border-radius: 10px 10px 0 0;
         }
         
         .envelope:after {
@@ -73,7 +134,7 @@
             bottom: 0;
             background: #ff5252;
             clip-path: polygon(0 0, 0 100%, 50% 50%);
-            border-radius: 8px 0 0 8px;
+            border-radius: 10px 0 0 10px;
         }
         
         .letter {
@@ -81,30 +142,39 @@
             width: 90%;
             height: 90%;
             background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             top: 5%;
             left: 5%;
             z-index: 1;
             transform: translateY(0);
-            transition: transform 0.5s ease 0.3s;
+            transition: transform 0.5s ease 0.3s, z-index 0s 0.3s;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
+            overflow: hidden;
         }
         
         .letter h2 {
             color: #ff6b6b;
             margin-bottom: 15px;
+            font-size: 1.8rem;
         }
         
         .letter p {
             color: #555;
             line-height: 1.6;
             margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .letter .heart-icon {
+            color: #ff6b6b;
+            font-size: 2rem;
+            margin: 10px 0;
         }
         
         /* 信封打开时的状态 */
@@ -115,47 +185,135 @@
         .envelope-container.open .letter {
             transform: translateY(-80px);
             z-index: 3;
+            transition: transform 0.5s ease 0.3s, z-index 0s 0s;
         }
         
         .instruction {
             margin-top: 20px;
             color: #666;
             font-style: italic;
+            font-size: 1.1rem;
+        }
+        
+        .music-control {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .play-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .play-btn:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 107, 107, 0.4);
+        }
+        
+        .play-btn:active {
+            transform: translateY(0);
+        }
+        
+        .music-note {
+            display: inline-block;
+            animation: bounce 1s infinite alternate;
+        }
+        
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-5px); }
+        }
+        
+        .footer {
+            margin-top: 30px;
+            color: #888;
+            font-size: 0.9rem;
         }
         
         @media (max-width: 600px) {
             h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
             }
             
             .envelope-container {
-                width: 250px;
-                height: 170px;
+                width: 280px;
+                height: 190px;
+            }
+            
+            .letter h2 {
+                font-size: 1.5rem;
+            }
+            
+            .letter p {
+                font-size: 1rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>生日快乐！</h1>
+        <div class="header">
+            <h1>猪猪老婆，生日快乐！</h1>
+            <div class="subtitle">愿你的每一天都充满阳光和欢笑</div>
+            <div class="hearts" id="hearts"></div>
+        </div>
         
         <div class="envelope-container" id="envelope">
             <div class="envelope"></div>
             <div class="letter">
-                <h2>亲爱的朋友</h2>
+                <h2>致我最爱的猪猪老婆</h2>
+                <div class="heart-icon">❤️</div>
                 <p>在这个特别的日子里，</p>
-                <p>愿你的生活充满欢笑和幸福，</p>
-                <p>愿你的梦想都能实现！</p>
-                <p>生日快乐！🎂🎉</p>
+                <p>我想告诉你，有你真好！</p>
+                <p>愿你的笑容永远灿烂，</p>
+                <p>愿你的心中永远充满阳光。</p>
+                <p>生日快乐，我的爱人！</p>
+                <p>永远爱你的老公 ❤️</p>
             </div>
         </div>
         
-        <p class="instruction">点击信封打开祝福</p>
+        <p class="instruction">点击信封打开我的祝福</p>
+        
+        <div class="music-control">
+            <button class="play-btn" id="playBtn">
+                <span class="music-note">🎵</span> 播放生日快乐歌
+            </button>
+        </div>
+        
+        <div class="footer">
+            <p>特别为你制作的生日祝福 ❤️</p>
+        </div>
     </div>
+
+    <audio id="birthdaySong" loop>
+        <source src="https://assets.mixkit.co/music/preview/mixkit-happy-birthday-to-you-443.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const envelope = document.getElementById('envelope');
+            const playBtn = document.getElementById('playBtn');
+            const birthdaySong = document.getElementById('birthdaySong');
+            const heartsContainer = document.getElementById('hearts');
+            let isPlaying = false;
             
             // 添加点击事件监听器
             envelope.addEventListener('click', function() {
@@ -167,6 +325,67 @@
                 e.preventDefault();
                 this.classList.toggle('open');
             });
+            
+            // 音乐播放控制
+            playBtn.addEventListener('click', function() {
+                if (isPlaying) {
+                    birthdaySong.pause();
+                    playBtn.innerHTML = '<span class="music-note">🎵</span> 播放生日快乐歌';
+                } else {
+                    birthdaySong.play();
+                    playBtn.innerHTML = '<span class="music-note">🎵</span> 暂停音乐';
+                }
+                isPlaying = !isPlaying;
+            });
+            
+            // 创建漂浮的心形
+            function createHearts() {
+                for (let i = 0; i < 15; i++) {
+                    setTimeout(() => {
+                        const heart = document.createElement('div');
+                        heart.classList.add('heart');
+                        
+                        // 随机位置
+                        const left = Math.random() * 100;
+                        heart.style.left = `${left}%`;
+                        
+                        // 随机大小
+                        const size = Math.random() * 15 + 10;
+                        heart.style.width = `${size}px`;
+                        heart.style.height = `${size}px`;
+                        
+                        // 随机颜色
+                        const colors = ['#ff6b6b', '#ff8e8e', '#ff5252', '#ff9a9e'];
+                        const color = colors[Math.floor(Math.random() * colors.length)];
+                        heart.style.background = color;
+                        heart.style.setProperty('--heart-color', color);
+                        
+                        heartsContainer.appendChild(heart);
+                        
+                        // 动画
+                        const animation = heart.animate([
+                            { opacity: 0, transform: 'translateY(0) rotate(45deg)' },
+                            { opacity: 1, transform: `translateY(-${Math.random() * 100 + 100}px) rotate(45deg)` }
+                        ], {
+                            duration: Math.random() * 3000 + 2000,
+                            easing: 'ease-out'
+                        });
+                        
+                        animation.onfinish = () => {
+                            heart.remove();
+                        };
+                    }, i * 500);
+                }
+            }
+            
+            // 定期创建心形
+            setInterval(createHearts, 5000);
+            createHearts(); // 初始创建
+            
+            // 自动打开信封（5秒后）
+            setTimeout(() => {
+                envelope.classList.add('open');
+            }, 5000);
         });
     </script>
 </body>
